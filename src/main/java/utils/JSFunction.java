@@ -21,7 +21,7 @@ public class JSFunction {
 			// 경고 창을 띄우고 특정 페이지로 이동할 수 있는 JS 코드 작성
 			String script = ""
 					+ "<script>"
-					+ "	alert('" + msg + "');"
+					+ "	alert(`" + msg + "`);"
 					+ "	location.href = '" + url +  "';"
 					+ "</script>";
 			writer.println(script);
@@ -37,7 +37,7 @@ public class JSFunction {
 		try {
 			String script = ""
 					+ "<script>"
-					+ "	alert('" + msg + "');"
+					+ "	alert(`" + msg + "`);"
 					+ "	location.href = '" + url +  "';"
 					+ "</script>";
 			out.println(script);
@@ -52,7 +52,7 @@ public class JSFunction {
 			PrintWriter writer = resp.getWriter();
 			String script = ""
 					+ "<script>"
-					+ "	alert('" + msg + "');"
+					+ "	alert(`" + msg + "`);"
 					+ "	history.back();"
 					+ "</script>";
 			writer.println(script);
@@ -64,7 +64,7 @@ public class JSFunction {
 		try {
 			String script = ""
 					+ "<script>"
-					+ "	alert('" + msg + "');"
+					+ "	alert(`" + msg + "`);"
 					+ "	history.back();"
 					+ "</script>";
 			out.println(script);

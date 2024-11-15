@@ -7,7 +7,7 @@ public class MemberDTO {
 	private String name;
 	private String email;
 	private String phone;
-	private java.sql.Date regidate;
+	private String regidate;
 	
 	public String getIdx() { return idx; }
 	public void setIdx(String idx) { this.idx = idx; }
@@ -27,6 +27,6 @@ public class MemberDTO {
 	public String getPhone() { return phone; }
 	public void setPhone(String phone) { this.phone = phone; }
 	
-	public java.sql.Date getRegidate() { return regidate; }
-	public void setRegidate(java.sql.Date regidate) { this.regidate = regidate; }
+	public String getRegidate() { return regidate; }
+	public void setRegidate(String regidate) { this.regidate = regidate; }
 }

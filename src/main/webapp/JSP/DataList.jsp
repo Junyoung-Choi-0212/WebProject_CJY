@@ -164,10 +164,17 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="Login.jsp">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">로그인</span>
-                      </a>
+                    	<% if (session.getAttribute("UserId") == null) { %>
+		                    <a class="dropdown-item" href="Login.jsp">
+		                        <i class="bx bx-power-off me-2"></i>
+		                        <span class="align-middle">로그인</span>
+		                    </a>
+                      	<% } else { %>
+                      		<a class="dropdown-item" href="Logout.jsp">
+		                        <i class="bx bx-power-off me-2"></i>
+		                        <span class="align-middle">로그아웃</span>
+		                    </a>
+                      	<% } %>
                     </li>
                   </ul>
                 </li>
