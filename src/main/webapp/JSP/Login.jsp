@@ -1,4 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import = "utils.CookieManager" %>
+
+<%
+	String loginId = CookieManager.readCookie(request, "loginId"); // loginId 라는 쿠키 값이 있는지 확인
+
+	String cookieCheck = "";
+	if (!loginId.equals("")) cookieCheck = "checked"; // 이미 loginId 쿠키가 생성되었다면 checked 속성값을 추가한다.
+%>
 
 <!DOCTYPE html>
 
@@ -85,6 +93,7 @@
                     class="form-control"
                     id="id"
                     name="id"
+                    value = "<%= loginId %>"
                     placeholder="아이디를 입력하세요."
                     autofocus
                   />
@@ -106,6 +115,12 @@
                       aria-describedby="password"
                     />
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember" name = "remember" value = "Y" <%= cookieCheck %> />
+                    <label class="form-check-label" for="remember"> 아이디 저장하기 </label>
                   </div>
                 </div>
                 <div class="mb-3">

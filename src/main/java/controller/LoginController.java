@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import utils.CookieManager;
 import utils.JSFunction;
 
 @WebServlet("/login.do")
@@ -20,10 +21,12 @@ public class LoginController extends HttpServlet{
 		
 		String id = req.getParameter("id");
 		String password = req.getParameter("password");
+		String remember = req.getParameter("remember");
 		
 		System.out.println("=================Parameter print====================");
 		System.out.println("id : " + id);
 		System.out.println("password : " + password);
+		System.out.println("remember : " + remember);
 		System.out.println("=================Parameter print====================");
 		
 		MemberDAO dao = new MemberDAO();
@@ -35,6 +38,9 @@ public class LoginController extends HttpServlet{
 			session.setAttribute("UserId", dto.getId());
 			session.setAttribute("UserName", dto.getName());
 			session.setAttribute("UserEmail", dto.getEmail());
+			
+			if (remember != null && remember.equals("Y")) CookieManager.makeCookie(resp, "loginId", id, 86400); // 로그인 id 저장, 기간은 하루
+			else CookieManager.deleteCookie(resp, "loginId"); // 로그인은 성공했으나 체크를 해제한 상태 -> 쿠키 삭제
 			
 			JSFunction.alertLocation(resp, dto.getName() + "님 환영합니다.", "JSP/index.jsp");
 //			resp.sendRedirect("JSP/index.jsp");
