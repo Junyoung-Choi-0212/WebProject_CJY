@@ -6,6 +6,7 @@
 
 	session.removeAttribute("UserId");
 	session.removeAttribute("UserName");
+	session.removeAttribute("UserEmail");
 
-	out.print("<script>location.href = 'Login.jsp';</script>");
+	out.print("<script>location.href = 'index.jsp';</script>");
 %>

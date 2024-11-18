@@ -34,6 +34,7 @@ public class LoginController extends HttpServlet{
 			// 세션에 정보 저장
 			session.setAttribute("UserId", dto.getId());
 			session.setAttribute("UserName", dto.getName());
+			session.setAttribute("UserEmail", dto.getEmail());
 			
 			JSFunction.alertLocation(resp, dto.getName() + "님 환영합니다.", "JSP/index.jsp");
 //			resp.sendRedirect("JSP/index.jsp");

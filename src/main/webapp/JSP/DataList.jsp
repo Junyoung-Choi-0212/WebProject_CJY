@@ -73,6 +73,17 @@
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <ul class="menu-inner py-1">
             <li class="menu-header small text-uppercase">
+            	<span class="menu-header-text">내 정보</span>
+            </li>
+            
+            <li class="menu-item">
+            	<a href = "../myinfo.do" class = "menu-link">
+            		<i class="menu-icon tf-icons bx bx-file"></i>
+                	<div data-i18n="Documentation">내 정보</div>
+            	</a>
+            </li>
+            
+            <li class="menu-header small text-uppercase">
               <span class="menu-header-text">게시판</span>
             </li>
             
@@ -132,22 +143,28 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="../assets/img/avatars/default.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li>
                       <a class="dropdown-item" href="#">
                         <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
+                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                              <img src="../assets/img/avatars/default.png" alt class="w-px-40 h-auto rounded-circle" />
                             </div>
-                          </div>
-                          <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">John Doe</span>
-                            <small class="text-muted">Admin</small>
-                          </div>
+                          </div> 
+                          <% if (session.getAttribute("UserId") == null) { %>
+							 <div class="flex-grow-1">
+	                           <span class="fw-semibold d-block">Guest</span>
+	                         </div>
+                          <% } else { %>
+	                          <div class="flex-grow-1">
+	                            <span class="fw-semibold d-block"><%= session.getAttribute("UserName") %></span>
+	                            <small class="text-muted"><%= session.getAttribute("UserEmail") %></small>
+	                          </div>
+                          <% } %>
                         </div>
                       </a>
                     </li>
@@ -155,10 +172,17 @@
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">내 정보</span>
-                      </a>
+                    	<% if (session.getAttribute("UserId") == null) { %>
+                    		  <div class="dropdown-item" onclick = "alert('해당 기능은 로그인 이후 사용 가능합니다.');">
+		                        <i class="bx bx-user me-2"></i>
+		                        <span class="align-middle">내 정보</span>
+		                      </div>
+                    	<% } else { %>
+		                      <a class="dropdown-item" href="../myinfo.do">
+		                        <i class="bx bx-user me-2"></i>
+		                        <span class="align-middle">내 정보</span>
+		                      </a>
+                      	<% } %>
                     </li>
                     <li>
                       <div class="dropdown-divider"></div>
