@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 
 <!-- =========================================================
@@ -29,7 +31,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>내 정보</title>
+    <title>글 쓰기</title>
 
     <meta name="description" content="" />
 
@@ -200,81 +202,52 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">내 정보 /</span> 회원 정보 조회 및 수정</h4>
+            	<% if (request.getParameter("type").equals("FREE")) { %>
+              		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">자유 게시판 /</span> 글 쓰기</h4>
+            	<% } else if (request.getParameter("type").equals("QNA")) { %>
+            		<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Q&amp;A 게시판 /</span> 글 쓰기</h4>
+            	<% } else if (request.getParameter("type").equals("DATA")) { %>
+					<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">자료실 게시판 /</span> 글 쓰기</h4>
+				<% } %>
 
               <div class="row" style = "display: flex; justify-content: center;">
-                <div class="col-md-6">
-                  <div class="card mb-4">
-                    <h5 class="card-header">회원 정보</h5>
-                    <div class="card-body">
-                    	<form id = "info" method = "post" action = "${pageContext.request.contextPath}/myinfo.do" onsubmit = "return form_chk();">
-                    		<input type = "hidden" id = "idx" name = "idx" value = "${ user.idx }"/>
-                    		<div class="mb-3">
-		                        <label for="id" class="form-label">아이디</label>
+                <!-- Form controls -->
+	                <div class="col-md-6">
+	                  <div class="card mb-4">
+	                    <div class="card-body">
+		                    <form id = "write" method = "post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/write.do" onsubmit="return validateForm(this);">
+		                      <div class="mb-3">
+		                        <label for="title" class="form-label">제목</label>
 		                        <input
-		                          class="form-control"
 		                          type="text"
-		                          id="id"
-		                          name = "id"
-		                          value = "${ user.id }"
-		                          readonly
+		                          class="form-control"
+		                          id="title"
+		                          name = "title"
+		                          placeholder="게시글의 제목을 작성해주세요."
 		                        />
 		                      </div>
-	                      <div class = "form-password-toggle">
-	                      	<label for="password" class="form-label">비밀번호</label>
-			                  <div class="input-group">
-		                          <input
-		                            type="password"
-		                            class="form-control"
-		                            id="password"
-		                            name = "password"
-		                            placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-		                            value = "${ user.password }"
-		                            aria-describedby="basic-default-password2"
-		                          />
-		                          <span id="basic-default-password2" class="input-group-text cursor-pointer"
-		                            ><i class="bx bx-hide"></i
-		                          ></span>
+		                      <div>
+		                        <label for="content" class="form-label">내용</label>
+		                        <textarea class="form-control" id="content" name = "content"></textarea>
 		                      </div>
-	                      </div>
-	                      <div>
-	                        <label for="name" class="form-label">이름</label>
-	                        <input
-	                          type="text"
-	                          class="form-control"
-	                          id="name"
-	                          name="name"
-	                          aria-describedby="defaultFormControlHelp"
-	                          value = "${ user.name }"
-	                        />
-	                      </div>
-	                      <div class="mb-3">
-			                  <label for="email" class="form-label">이메일</label>
-			                  <input
-			                    type="text"
-			                    class="form-control"
-			                    id="email"
-			                    name="email"
-			                    value = "${ user.email }"
-			                  />
-			                </div>
-			              <div class="mb-3">
-			                  <label for="email" class="form-label">전화번호</label>
-			                  <input
-			                    type="text"
-			                    class="form-control"
-			                    id="phone"
-			                    name="phone"
-			                    value = "${ user.phone }"
-			                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
-			                  />
-			                </div>
-			                <div class = "mb-3">
-			                	<button style = "width: 100%; margin-top : 1.6em;" type="submit" class="btn btn-xl btn-primary" form ="info">정보 수정</button>
-			                </div>
-                    	</form>
-                    </div>
-                  </div>
+		                      <c:if test = "${ type eq 'DATA' }">
+		                      	<div>
+		                      		<label for="ofile" class="form-label">첨부 파일</label>
+		                      		<input type="file" id = "ofile" name="ofile" class="form-control" />
+		                      	</div>
+		                      </c:if>
+		                      <div style = "text-align: center; margin-top : 2em;">
+		                      	<button class="btn btn-l btn-primary" type="submit">작성 완료</button>
+						        <button class="btn btn-l btn-primary" type="reset">작성 내용 초기화</button>
+						        <button class="btn btn-l btn-primary" type="button" onclick="toList('<%=request.getParameter("type")%>')">
+						            목록 바로가기
+						        </button>
+		                      </div>
+		                      <input type = "hidden" name = "type" value = "<%=request.getParameter("type")%>" />
+	                      </form>
+	                    </div>
+	                  </div>
+	                </div>
                 </div>
               </div>
             </div>
@@ -314,54 +287,20 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
+  <script>
+	  function validateForm(form) {  // 필수 항목 입력 확인
+	      if (form.title.value == "") {
+	          alert("제목을 입력하세요.");
+	          form.title.focus();
+	          return false;
+	      }
+	      if (form.content.value == "") {
+	          alert("내용을 입력하세요.");
+	          form.content.focus();
+	          return false;
+	      }
+	  }
   
-  <script type="text/javascript">
-  	function form_chk() {
-  		// 기본적인 입력 체크
-  		if (!document.getElementById("id").value) {
-  			alert("아이디를 입력해주세요!");
-  			document.getElementById("id").focus();
-  			return false;
-  		}
-  		if (!document.getElementById("password").value) {
-  			alert("비밀번호를 입력해주세요!");
-  			document.getElementById("password").focus()
-  			return false;
-  		}
-  		if (!document.getElementById("name").value) {
-  			alert("이메일을 입력해주세요!");
-  			document.getElementById("name").focus();
-  			return false;
-  		}
-  		if (!document.getElementById("email").value) {
-  			alert("이메일을 입력해주세요!");
-  			document.getElementById("email").focus();
-  			return false;
-  		}
-  		if (!document.getElementById("phone").value) {
-  			alert("전화번호를 입력해주세요!");
-  			document.getElementById("phone").focus();
-  			return false;
-  		}
-  		
-  		// 이메일, 전화번호 형식 체크
-  		var emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  		var phoneRegex = /[0-9]{11}/;
-  		
-  		if (!document.getElementById("email").value.match(emailRegex)) {
-  			alert("이메일 형식에 맞는 값을 입력해주세요!");
-  			document.getElementById("email").focus();
-  			return false;
-  		}
-  		if (!document.getElementById("phone").value.match(phoneRegex)) {
-  			alert("전화번호 형식에 맞는 값을 입력해주세요!");
-  			document.getElementById("phone").focus();
-  			return false;
-  		}
-  		
-  		alert("회원 정보 수정이 완료되었습니다!");
-  		
-  		return true;
-  	}
+  	function toList(type) { location.href= '${pageContext.request.contextPath}/list.do?type=' + type; }
   </script>
 </html>

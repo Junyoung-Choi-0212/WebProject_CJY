@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Insert title here</title>
+		<title>게시판 선택</title>
 		
 		<!-- Favicon -->
 	    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico" />
@@ -50,9 +50,9 @@
 	            <h5 class="card-header">게시판 선택</h5>
 	            <div class="card-body">
 	            	<div class="d-grid gap-2 col-lg-6 mx-auto">
-	            		<button type="button" class="btn btn-xl btn-primary" onclick = "location.href='FreeList.jsp'">자유 게시판</button>
-			            <button type="button" class="btn btn-xl btn-primary" onclick = "location.href='QnAList.jsp'">Q&A 게시판</button>
-			            <button type="button" class="btn btn-xl btn-primary" onclick = "location.href='DataList.jsp'">자료실 게시판</button>
+	            		<button type="button" class="btn btn-xl btn-primary" onclick = "location.href='../list.do?type=FREE'">자유 게시판</button>
+			            <button type="button" class="btn btn-xl btn-primary" onclick = "location.href='../list.do?type=QNA'">Q&A 게시판</button>
+			            <button type="button" class="btn btn-xl btn-primary" onclick = "location.href='../list.do?type=DATA'">자료실 게시판</button>
 	            	</div>
 	            </div>
 	          </div>

@@ -8,8 +8,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import utils.CookieManager;
-import utils.JSFunction;
+import util.CookieManager;
+import util.JSFunction;
 
 @WebServlet("/login.do")
 public class LoginController extends HttpServlet{

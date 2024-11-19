@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import utils.JSFunction;
+import util.JSFunction;
 
 @WebServlet("/myinfo.do")
 public class MyInfoController extends HttpServlet{

@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "utils.CookieManager" %>
+<%@ page import = "util.CookieManager" %>
 
 <%
 	String loginId = CookieManager.readCookie(request, "loginId"); // loginId 라는 쿠키 값이 있는지 확인
@@ -85,7 +85,7 @@
               <h4 class="mb-2">어서오세요! 👋</h4>
               <p class="mb-4">게시판의 모든 기능을 사용하기 위해서는 로그인이 필요합니다.</p>
 
-              <form id="formAuthentication" class="mb-3" action="../login.do" method="POST">
+              <form id="formAuthentication" class="mb-3" action="../login.do" method="POST" onsubmit = "return form_chk();">
                 <div class="mb-3">
                   <label for="email" class="form-label">아이디</label>
                   <input
@@ -162,4 +162,22 @@
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
+  
+  <script type="text/javascript">
+  	function form_chk() {
+  		// 기본적인 입력 체크
+  		if (!document.getElementById("id").value) {
+  			alert("아이디를 입력해주세요!");
+  			document.getElementById("id").focus();
+  			return false;
+  		}
+  		if (!document.getElementById("password").value) {
+  			alert("비밀번호를 입력해주세요!");
+  			document.getElementById("password").focus()
+  			return false;
+  		}
+  		
+  		return true;
+  	}
+  </script>
 </html>

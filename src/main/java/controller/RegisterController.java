@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import utils.JSFunction;
+import util.JSFunction;
 
 @WebServlet("/register.do")
 public class RegisterController extends HttpServlet{
