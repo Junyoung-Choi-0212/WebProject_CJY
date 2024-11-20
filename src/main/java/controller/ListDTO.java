@@ -12,6 +12,7 @@ public class ListDTO {
 	private int visitcount;
 	private java.sql.Date postdate;
 	private String listtype;
+	private int likecount;
 	
 	public String getIdx() { return idx; }
 	public void setIdx(String idx) { this.idx = idx; }
@@ -45,4 +46,7 @@ public class ListDTO {
 	
 	public String getListtype() { return listtype; }
 	public void setListtype(String listtype) { this.listtype = listtype; }
+	
+	public int getLikecount() { return likecount; }
+	public void setLikecount(int likecount) { this.likecount = likecount; }
 }

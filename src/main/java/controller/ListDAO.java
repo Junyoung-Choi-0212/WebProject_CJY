@@ -64,6 +64,7 @@ public class ListDAO extends DBConnPool{
 				dto.setVisitcount(rs.getInt(9));
 				dto.setPostdate(rs.getDate(10));
 				dto.setListtype(rs.getString(11));
+				dto.setLikecount(rs.getInt(12));
 				
 				list.add(dto);
 			}
@@ -99,6 +100,7 @@ public class ListDAO extends DBConnPool{
 				dto.setVisitcount(rs.getInt(9));
 				dto.setPostdate(rs.getDate(10));
 				dto.setListtype(rs.getString(11));
+				dto.setLikecount(rs.getInt(12));
 			}
 		}
 		catch (Exception e) {
@@ -198,6 +200,23 @@ public class ListDAO extends DBConnPool{
 		}
 		catch (Exception e) {
 			System.out.println("조회수 증가 중 예외 발생");
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateLikecount(String idx, String type) {
+		String query = "";
+		
+		if (type.equals("plus")) query = "update list set likecount = likecount + 1 where idx = ?";
+		else query = "update list set likecount = likecount - 1 where idx = ?";
+		
+		try {
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, idx);
+			pstmt.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("좋아요 수 변경 중 예외 발생");
 			e.printStackTrace();
 		}
 	}

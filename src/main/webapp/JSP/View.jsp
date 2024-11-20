@@ -75,6 +75,8 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="${pageContext.request.contextPath}/assets/js/config.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   </head>
 
   <body>
@@ -285,6 +287,13 @@
 			        		</div>
 			        	</c:if>
                       </div>
+                      <div style = "width: 100%; display: flex; justify-content: center; text-align: center; margin-bottom: 2em;">
+                      	<div style = "max-width: fit-content; max-width: -moz-fit-content; margin-top: 2em;" onclick = "like(${ dto.idx })">
+                      		<img src = "${pageContext.request.contextPath}/assets/img/icons/functions/like2.png" style = "width: 10em;" />
+                      		<p>좋아요 <span id = "likecount">${ dto.likecount }</span></p>
+                      	</div>
+                      </div>
+                      <hr>
                       <div style = "text-align: center; margin-top: 2em; display: flex; justify-content: space-between;">
 				        <button class="btn btn-l btn-primary" type="button" onclick="toList('<%=request.getParameter("type")%>')">
 				            목록 바로가기
@@ -350,6 +359,30 @@
 	          return false;
 	      }
 	  }
+	  
+	function like(idx) {
+		var userid = '<%= session.getAttribute("UserId") %>';
+		if (userid == null) {
+			alert('해당 기능은 로그인 이후 사용 가능합니다.');
+			return;
+		}
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/like.do",
+			type: "post",
+			data: {idx: idx, userid: userid},
+			dataType: "text",
+			success: function(response){
+				var likecount = document.getElementById("likecount");
+				
+				if (response == "minus") likecount.innerHTML = parseInt(likecount.innerHTML) - 1;
+				else likecount.innerHTML = parseInt(likecount.innerHTML) + 1;
+			},
+			error: function(xhr, status, error) {
+				alert("좋아요 기능 작동 중 오류가 발생했습니다.\n" + error);
+			}
+		});
+	}
 	  
 	function toDownload(type, ofile, sfile, idx) { 
 		location.href = '${pageContext.request.contextPath}/download.do?type=' + type + '&ofile=' + ofile + '&sfile=' + sfile + '&idx=' + idx;

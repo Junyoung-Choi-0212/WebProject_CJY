@@ -16,8 +16,6 @@ public class DownloadController extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String type = req.getParameter("type");
-		
 		String ofile = req.getParameter("ofile");
 		String sfile = req.getParameter("sfile");
 		String idx = req.getParameter("idx");
