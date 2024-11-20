@@ -251,7 +251,7 @@
                       	<label class = "form-label" for = "content" style = "width: 100%; text-align: center; font-size: 16px;">내용</label>
                         <textarea class="form-control" id="content" name = "content" <c:if test = "${ dto.authorid ne sessionScope.UserId }">readonly</c:if>>${ dto.content }</textarea>
                         <c:if test = "${ not empty dto.ofile and (isImage eq true or not empty mimeType) }">
-			        		<div style="text-align: center;">
+			        		<div style="text-align: center; margin-top: 1.6em;">
 				        		<c:choose>
 				        			<c:when test = "${ mimeType eq 'img' }">
 				        				<img src = "${pageContext.request.contextPath}/Uploads/${ dto.sfile }" style = "max-width : 70%;" />
@@ -277,8 +277,10 @@
 					        		</div>
 				        		</c:if>
 				        		<div style = "margin-top: 2em;">
-				        			<p>첨부파일 다운로드 수 : ${ dto.downcount }</p>
-				        			<button class="btn btn-l btn-primary" type="button">다운로드</button>
+				        			<p>첨부파일 다운로드 수 : <span id = "downcount">${ dto.downcount }</span></p>
+				        			<button class="btn btn-l btn-primary" type="button" onclick="toDownload('${ type }', '${ dto.ofile }', '${ dto.sfile }', '${ dto.idx }')">
+				        				다운로드
+				        			</button>
 				        		</div>
 			        		</div>
 			        	</c:if>
@@ -348,7 +350,13 @@
 	          return false;
 	      }
 	  }
-  
+	  
+	function toDownload(type, ofile, sfile, idx) { 
+		location.href = '${pageContext.request.contextPath}/download.do?type=' + type + '&ofile=' + ofile + '&sfile=' + sfile + '&idx=' + idx;
+		
+		var downcount = document.getElementById("downcount");
+		downcount.innerHTML = parseInt(downcount.innerHTML) + 1;
+	}
   	function toList(type) { location.href= '${pageContext.request.contextPath}/list.do?type=' + type; }
   </script>
 </html>

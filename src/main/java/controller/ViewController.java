@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.CookieManager;
 
 @WebServlet("/view.do")
 public class ViewController extends HttpServlet{
@@ -18,6 +19,7 @@ public class ViewController extends HttpServlet{
 		String idx = req.getParameter("idx");
 		
 		ListDAO dao = new ListDAO();
+		controlViewcount(req, resp, dao, idx);
 		ListDTO dto = dao.getList(type, idx);
 		dao.close();
 		
@@ -50,5 +52,15 @@ public class ViewController extends HttpServlet{
 		for (String s : strArr) { if (s.equalsIgnoreCase(ext)) retValue = true; }
 		
 		return retValue;
+	}
+	
+	public void controlViewcount(HttpServletRequest req, HttpServletResponse resp, ListDAO dao, String idx) {
+		String cookieName = "view" + idx;
+		String cookieChk = CookieManager.readCookie(req, cookieName);
+		
+		if(cookieChk.equals("")) { // 쿠키가 없다면(오늘 처음 보는 글 이라면)
+			dao.updateVisitcount(idx); // 조회수를 1 증가 시키고
+			CookieManager.makeCookie(resp, "view" + idx, "Y", 86400); // view[idx] 이름과 "Y" 값을 가진 쿠키를 만든다.
+		}
 	}
 }

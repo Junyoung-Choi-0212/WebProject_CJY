@@ -32,7 +32,7 @@ public class DeleteController extends HttpServlet{
 		
 		// 작성자 인증
 		if (!dto.getAuthorid().equals(session.getAttribute("UserId").toString())) {
-			JSFunction.alertBack(resp, "작성자 본인만 수정할 수 있습니다.");
+			JSFunction.alertBack(resp, "작성자 본인만 삭제할 수 있습니다.");
 			return;
 		}
 		

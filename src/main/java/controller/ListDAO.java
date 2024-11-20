@@ -173,4 +173,32 @@ public class ListDAO extends DBConnPool{
 		
 		return result;
 	}
+	
+	public void updateDowncount(String idx) {
+		String query = "update list set downcount = downcount + 1 where idx = ?";
+		
+		try {
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, idx);
+			pstmt.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("첨부파일 다운로드 중 예외 발생");
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateVisitcount(String idx) {
+		String query = "update list set visitcount = visitcount + 1 where idx = ?";
+		
+		try {
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, idx);
+			pstmt.executeUpdate();
+		}
+		catch (Exception e) {
+			System.out.println("조회수 증가 중 예외 발생");
+			e.printStackTrace();
+		}
+	}
 }
