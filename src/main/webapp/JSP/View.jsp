@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 
@@ -269,6 +270,9 @@
 				        					Your browser does not support the video tag.
 				        				</video>
 				        			</c:when>
+				        			<c:otherwise>
+				        				<p>미리보기를 지원하지 않는 형식입니다.</p>
+				        			</c:otherwise>
 				        		</c:choose>
 				        		<c:if test = "${ dto.authorid eq sessionScope.UserId }">
 					        		<div>
@@ -294,6 +298,44 @@
                       	</div>
                       </div>
                       <hr>
+                      <c:if test = "${ type eq 'QNA' }">
+                      	<div style = "display: flex; justify-content: center;">
+                      		<div class="card-body" style = "border: 1px solid #000000; border-radius: 1em; text-align: center;">
+                      			<div>
+			                    	<label class = "form-label" for = "comment" style = "width: 100%; text-align: center; font-size: 16px;">댓글</label>
+			                    	<textarea class="form-control" id = "comment" name = "comment"></textarea>
+			                      </div>
+			                      <button class="btn btn-l btn-primary" type="button" style = "margin-top: 1.5em; float: right;" onclick="writeComment('${ type }', ${ dto.idx }, document.getElementById('comment').value)">
+						            댓글 작성하기
+						        </button>
+                      		</div>
+                      	</div>
+                      	<hr>
+                      	<div style = "width: 100%;">
+                      		<c:choose>
+	                      		<c:when test="${ not empty comments }">
+	                      			<c:forEach items = "${ comments }" var = "row" varStatus = "loop">
+                      					<div class="card-body" style = "border: 1px solid #000000; border-radius: 1em; text-align: center; margin-bottom: 1em;">
+                      						<div style = "display: flex; justify-content: space-between; margin-bottom: 1em;">
+                      							<span>작성자 : ${ row.username }</span>
+                      							<span>작성 시간 : ${ row.postdate }</span>
+                      						</div>
+                      						<textarea class = "form-control" id = "comment${ row.idx }" readonly>${ row.content }</textarea>
+                      						<div style = "text-align: right; margin-top: 1em;">
+                      							<c:if test = "${ sessionScope.UserIdx eq row.useridx }">
+                      								<button class="btn btn-l btn-primary" type="button" onclick="commentEdit(${ row.idx })">수정하기</button>
+                      								<button class="btn btn-l btn-danger" type="button" onclick="commentDelete(${ row.idx })">삭제하기</button>
+                      							</c:if>
+                      						</div>
+                      					</div>
+	                      			</c:forEach>
+	                      		</c:when>
+	                      		<c:otherwise>
+	                      			<p style ="text-align:center;">아직 댓글이 없습니다.</p>	
+	                      		</c:otherwise>
+                      		</c:choose>
+                      	</div>
+                      </c:if>
                       <div style = "text-align: center; margin-top: 2em; display: flex; justify-content: space-between;">
 				        <button class="btn btn-l btn-primary" type="button" onclick="toList('<%=request.getParameter("type")%>')">
 				            목록 바로가기
@@ -361,7 +403,7 @@
 	  }
 	  
 	function like(idx) {
-		var userid = '<%= session.getAttribute("UserId") %>';
+		var userid = <%= session.getAttribute("UserId") %>;
 		if (userid == null) {
 			alert('해당 기능은 로그인 이후 사용 가능합니다.');
 			return;
@@ -384,6 +426,98 @@
 		});
 	}
 	  
+	function writeComment(type, idx, comment) {
+		var userid;
+		var username;
+		if ("${ sessionScope.UserId }" == "") {
+			alert('해당 기능은 로그인 이후 사용 가능합니다.');
+			return;
+		}
+		else {
+			userid = '<%= session.getAttribute("UserId") %>';
+			username = '<%= session.getAttribute("UserName") %>';
+		}
+		
+		if (comment == "") {
+			alert("댓글 내용이 비어있습니다.\n댓글을 내용을 작성해주세요.");
+			comment.focus();
+			return;
+		} 
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/comment.do",
+			type: "post",
+			data: {type: type, idx: idx, userid: userid, username: username, comment: comment},
+			dataType: "text",
+			success: function(response){
+				alert("댓글 작성이 완료되었습니다.");
+				location.reload(true);
+			},
+			error: function(xhr, status, error) {
+				alert("댓글 작성 중 오류가 발생했습니다.\n" + error);
+			}
+		});
+	}
+	
+	function commentEdit(index) {
+		var comment = document.getElementById('comment' + index);
+		if (comment.readOnly) comment.readOnly = false;
+		else {
+			var userid;
+			if ("${ sessionScope.UserId }" == "") {
+				alert('해당 기능은 로그인 이후 사용 가능합니다.');
+				return;
+			}
+			else userid = '<%= session.getAttribute("UserId") %>';
+			
+			if (comment.value == "") {
+				alert("댓글 내용이 비어있습니다.\n댓글을 내용을 작성해주세요.");
+				comment.focus();
+				return;
+			}
+			
+			$.ajax({
+				url: "${pageContext.request.contextPath}/comment/edit.do",
+				type: "post",
+				data: {idx: index, comment: comment.value},
+				dataType: "text",
+				success: function(response){
+					alert("댓글 수정이 완료되었습니다.");
+					location.reload(true);
+				},
+				error: function(xhr, status, error) {
+					alert("댓글 수정 중 오류가 발생했습니다.\n" + error);
+				}
+			});
+		}
+	}
+	
+	function commentDelete(index) {
+		var userid;
+		if ("${ sessionScope.UserId }" == "") {
+			alert('해당 기능은 로그인 이후 사용 가능합니다.');
+			return;
+		}
+		else userid = '<%= session.getAttribute("UserId") %>';
+		
+		if (confirm("정말로 댓글을 삭제하시겠습니까?\n해당 작업은 복구 불가능합니다!")) {
+			$.ajax({
+				url: "${pageContext.request.contextPath}/comment/delete.do",
+				type: "post",
+				data: {idx: index},
+				dataType: "text",
+				success: function(response){
+					alert("댓글 삭제가 완료되었습니다.");
+					location.reload(true);
+				},
+				error: function(xhr, status, error) {
+					alert("댓글 삭제 중 오류가 발생했습니다.\n" + error);
+				}
+			});
+		}
+		else alert('삭제를 취소하셨습니다.');
+	}
+	
 	function toDownload(type, ofile, sfile, idx) { 
 		location.href = '${pageContext.request.contextPath}/download.do?type=' + type + '&ofile=' + ofile + '&sfile=' + sfile + '&idx=' + idx;
 		

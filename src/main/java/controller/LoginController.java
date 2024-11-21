@@ -35,6 +35,7 @@ public class LoginController extends HttpServlet{
 		
 		if (dto.getId() != null) {
 			// 세션에 정보 저장
+			session.setAttribute("UserIdx", dto.getIdx());
 			session.setAttribute("UserId", dto.getId());
 			session.setAttribute("UserName", dto.getName());
 			session.setAttribute("UserEmail", dto.getEmail());

@@ -20,8 +20,6 @@ public class LikeController extends HttpServlet{
 		String userid = req.getParameter("userid");
 		String result = "";
 		
-		HttpSession session = req.getSession();
-		
 		if (userid == null) {
 			JSFunction.alertBack(resp, "로그인 후 이용해주세요.");
 			return; // 추가적인 코드 실행 차단

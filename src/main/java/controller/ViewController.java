@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -37,13 +38,21 @@ public class ViewController extends HttpServlet{
 			if (mimeContains(extArray1, ext)) mimeType = "img";
 			if (mimeContains(extArray2, ext)) mimeType = "audio";
 			if (mimeContains(extArray3, ext)) mimeType = "video";
+			if (mimeType == null) mimeType = "others";
 			
+			System.out.println("ofile = " + dto.getOfile());
 			System.out.println("MIME타입 = " + mimeType);
 			req.setAttribute("mimeType", mimeType);
 		}
 		
+		// 댓글 정보 읽어오기
+		ListcommentDAO commentdao = new ListcommentDAO();
+		List<ListcommentDTO> comments = commentdao.getComments(idx);
+		commentdao.close();
+		
 		req.setAttribute("type", type);
 		req.setAttribute("dto", dto);
+		req.setAttribute("comments", comments);
 		req.getRequestDispatcher("JSP/View.jsp").forward(req, resp);
 	}
 	
