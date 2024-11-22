@@ -246,7 +246,18 @@
             <div class="container-xxl flex-grow-1 container-p-y">
               <!-- Bootstrap Dark Table -->
               <div class="card">
-                <h5 class="card-header" style = "text-align: center;">자유 게시판</h5>
+                <h5 class="card-header" style = "text-align: center;">
+                	<c:if test = "${ type eq 'FREE' }">
+                		자유
+                	</c:if>
+                	<c:if test = "${ type eq 'QNA' }">
+                		Q&amp;A
+                	</c:if>
+                	<c:if test = "${ type eq 'DATA' }">
+                		자료실
+                	</c:if>
+                	 게시판
+                </h5>
                 <div class="table-responsive text-nowrap">
                   <table class="table table-dark">
                     <thead>
