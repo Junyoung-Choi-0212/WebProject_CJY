@@ -101,9 +101,7 @@
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
                     <label class="form-label" for="password">비밀번호</label>
-                    <a href="auth-forgot-password-basic.html">
-                      <small>비밀번호를 잊어버리셨나요?</small>
-                    </a>
+                    
                   </div>
                   <div class="input-group input-group-merge">
                     <input
@@ -127,6 +125,11 @@
                   <button class="btn btn-primary d-grid w-100" type="submit">로그인</button>
                 </div>
               </form>
+              <div class = "text-center" style = "text-align: center; margin-top: 1.5em; margin-bottom: 1.5em;">
+            	<a href="javascript:forgotPassword();">
+	                비밀번호를 잊어버리셨나요?
+	              </a>
+              </div>
 
               <p class="text-center">
                 <span>회원이 아니신가요?</span>
@@ -164,6 +167,34 @@
   </body>
   
   <script type="text/javascript">
+  	function forgotPassword() {
+  		var id = document.getElementById("id");
+  		if (id.value == "") {
+  			alert("아이디를 입력해주세요!");
+  			id.focus();
+  			return false;
+  		}
+  		
+  		if (confirm("확인 버튼 클릭 시 임시 비밀번호를 입력하셨던 이메일로 발송드립니다.")) {
+  			$.ajax({
+  				url: "../forgotpassword.do",
+  				type: "post",
+  				data: {id: id.value},
+  				dataType: "text",
+  				success: function(response){
+  					alert("임시 비밀번호 발송이 완료되었습니다.");
+  				},
+  				error: function(xhr, status, error) {
+  					alert("임시 비밀번호 발송 중 오류가 발생했습니다.\n" + error);
+  				}
+  			});
+  		}
+  		else {
+  			alert("임시 비밀번호 발급을 취소하셨습니다.");
+  			return false;
+  		}
+  	}
+  
   	function form_chk() {
   		// 기본적인 입력 체크
   		if (!document.getElementById("id").value) {

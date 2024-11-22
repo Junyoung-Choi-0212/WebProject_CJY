@@ -29,6 +29,16 @@ public class RegisterController extends HttpServlet{
 		System.out.println("phone : " + phone);
 		System.out.println("=================Parameter print====================");
 		
+		MemberDAO dao = new MemberDAO();
+		
+		MemberDTO duplicatedChk = dao.getMemberDTO(id);
+		
+		if (duplicatedChk.getId() != null) {
+			JSFunction.alertBack(resp, "입력하신 아이디는 사용 중 입니다.\n다른 아이디를 입력해주세요.");
+			dao.close();
+			return;
+		}
+		
 		MemberDTO dto = new MemberDTO();
 		dto.setId(id);
 		dto.setPassword(password);
@@ -36,7 +46,7 @@ public class RegisterController extends HttpServlet{
 		dto.setEmail(email);
 		dto.setPhone(phone);
 		
-		MemberDAO dao = new MemberDAO();
+		
 		int result = dao.register(dto);
 		dao.close();
 		

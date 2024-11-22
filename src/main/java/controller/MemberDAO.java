@@ -31,6 +31,58 @@ public class MemberDAO extends DBConnPool{
 		return result;
 	}
 	
+	// 중복 확인 & 임시 비밀번호 발급을 하기 전 정보 가져오기
+	public MemberDTO getMemberDTO(String uid) {
+		MemberDTO dto = new MemberDTO(); // 인스턴스
+		
+		String query = "select * from member where id = ?";
+		System.out.println("임시 비밀번호 발급 전 정보 가져오기");
+		
+		try {
+			pstmt = con.prepareStatement(query); // 실행을 위한 prepared 인스턴스 생성
+			// query 변수의 매개변수
+			pstmt.setString(1, uid);
+			rs = pstmt.executeQuery(); // 실행
+			
+			if (rs.next()) { // 회원 정보가 있다면 DIO 객체에 저장
+				dto.setIdx(rs.getString(1));
+				dto.setId(rs.getString(2));
+				dto.setPassword(rs.getString(3));
+				dto.setName(rs.getString(4));
+				dto.setEmail(rs.getString(5));
+				dto.setPhone(rs.getString(6));
+				dto.setRegidate(rs.getString(7));
+			}
+		}
+		catch (Exception e) { 
+			System.out.println("회원 정보 조회 중 예외 발생");
+			e.printStackTrace(); 
+		}
+		
+		return dto;
+	}
+	
+	// 임시 비밀번호로 변경하기
+	public int updateTempPassword(String id, String password) {
+		int result = 0;
+		
+		String query = "update member set password = ? where id = ?";
+		System.out.println("임시 비밀번호로 변경하기");
+		
+		try {
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, password);
+			pstmt.setString(2, id);
+			result = pstmt.executeUpdate();
+		}
+		catch (Exception e) { 
+			System.out.println("임시 비밀번호 변경 중 예외 발생");
+			e.printStackTrace(); 
+		}
+		
+		return result;
+	}
+	
 	// 로그인
 	public MemberDTO getMemberDTO(String uid, String upass) {
 		MemberDTO dto = new MemberDTO(); // 인스턴스

@@ -74,6 +74,17 @@ public class MyInfoController extends HttpServlet{
 		System.out.println("phone : " + phone);
 		System.out.println("=================Parameter print====================");
 		
+		MemberDAO dao = new MemberDAO();
+		
+		MemberDTO duplicatedChk = dao.getMemberDTO(id);
+		
+		// 변경하려는 ID를 사용 중인 사람이 있거나 그 아이디를 사용 중인 사람이 본인이 아닐 경우
+		if (duplicatedChk.getId() != null && !duplicatedChk.getIdx().equals(idx)) {
+			JSFunction.alertBack(resp, "입력하신 아이디는 사용 중 입니다.\n다른 아이디를 입력해주세요.");
+			dao.close();
+			return;
+		}
+		
 		MemberDTO dto = new MemberDTO();
 		dto.setIdx(idx);
 		dto.setId(id);
@@ -82,7 +93,6 @@ public class MyInfoController extends HttpServlet{
 		dto.setEmail(email);
 		dto.setPhone(phone);
 		
-		MemberDAO dao = new MemberDAO();
 		int result = dao.update(dto);
 		dao.close();
 		
