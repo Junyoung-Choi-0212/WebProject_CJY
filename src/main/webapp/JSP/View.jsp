@@ -439,7 +439,7 @@
 		}
 		
 		if (comment == "") {
-			alert("댓글 내용이 비어있습니다.\n댓글을 내용을 작성해주세요.");
+			alert("댓글 내용이 비어있습니다.\n댓글 내용을 작성해주세요.");
 			comment.focus();
 			return;
 		} 
@@ -471,7 +471,7 @@
 			else userid = '<%= session.getAttribute("UserId") %>';
 			
 			if (comment.value == "") {
-				alert("댓글 내용이 비어있습니다.\n댓글을 내용을 작성해주세요.");
+				alert("댓글 내용이 비어있습니다.\n댓글 내용을 작성해주세요.");
 				comment.focus();
 				return;
 			}
