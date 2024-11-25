@@ -403,11 +403,12 @@
 	  }
 	  
 	function like(idx) {
-		var userid = <%= session.getAttribute("UserId") %>;
-		if (userid == null) {
+		var userid;
+		if ("${ sessionScope.UserId }" == "") {
 			alert('해당 기능은 로그인 이후 사용 가능합니다.');
 			return;
 		}
+		else userid = '<%= session.getAttribute("UserId") %>';
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/like.do",
