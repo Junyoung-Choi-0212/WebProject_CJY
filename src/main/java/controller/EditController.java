@@ -39,14 +39,16 @@ public class EditController extends HttpServlet{
 		String sfile = "";
 		
 		// ------------------------------ file upload ---------------------------------
-		String saveDirectory = req.getServletContext().getRealPath("/Uploads");
-		try { ofile = FileManager.uploadFile(req, saveDirectory); } // form에서 전송한 파일 업로드 처리
-		catch(Exception e) {
-			JSFunction.alertBack(resp, "파일 업로드 오류입니다."); // 문제가 있는 경우 예외처리
-			return;
+		if (req.getParameter("ofile") != null) {
+			String saveDirectory = req.getServletContext().getRealPath("/Uploads");
+			try { ofile = FileManager.uploadFile(req, saveDirectory); } // form에서 전송한 파일 업로드 처리
+			catch(Exception e) {
+				JSFunction.alertBack(resp, "파일 업로드 오류입니다."); // 문제가 있는 경우 예외처리
+				return;
+			}
+			
+			if (ofile != "") sfile = FileManager.renameFile(saveDirectory, ofile);
 		}
-		
-		if (ofile != "") sfile = FileManager.renameFile(saveDirectory, ofile);
 		// ------------------------------ file upload ---------------------------------
 		
 		String idx = req.getParameter("idx");
